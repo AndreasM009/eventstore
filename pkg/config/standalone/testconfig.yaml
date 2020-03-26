@@ -1,0 +1,10 @@
+kind: eventstore
+metadata:
+  name: myeventstore
+spec:
+  type: eventstore.azure.tablestorage
+  metadata:
+  - name: storageAccount
+    value: "testaccount"
+  - name: storageAccountKey
+    value: "testaccountkey"

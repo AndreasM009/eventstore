@@ -10,11 +10,11 @@ package http
 //---------------------------------------------------------------------------------------------
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 
 	"github.com/AndreasM009/eventstore-go/store"
-	jsoniter "github.com/json-iterator/go"
 	routing "github.com/qiangxue/fasthttp-routing"
 	"github.com/valyala/fasthttp"
 )
@@ -26,7 +26,6 @@ type APIRoutes interface {
 
 type api struct {
 	evtstore store.EventStore
-	json     jsoniter.API
 }
 
 const (
@@ -38,7 +37,6 @@ const (
 func NewAPI(evtstore store.EventStore) APIRoutes {
 	api := &api{
 		evtstore: evtstore,
-		json:     jsoniter.ConfigFastest,
 	}
 	return api
 }
@@ -53,9 +51,11 @@ func (a *api) onPostEntity(c *routing.Context) error {
 	id := c.Param(entityIDParam)
 	body := c.PostBody()
 
+	fmt.Println(string(body))
+
 	ety := store.Entity{}
 
-	err := a.json.Unmarshal(body, &ety)
+	err := json.Unmarshal(body, &ety)
 	if err != nil {
 		msg := NewErrorResponse("ERR_INVOKE_POST_ENTITY", fmt.Sprintf("can't deserialize request: %s", err))
 		respondWithError(c.RequestCtx, fasthttp.StatusInternalServerError, msg)
@@ -72,7 +72,7 @@ func (a *api) onPostEntity(c *routing.Context) error {
 		return nil
 	}
 
-	resdata, err := a.json.Marshal(res)
+	resdata, err := json.Marshal(res)
 	if err != nil {
 		msg := NewErrorResponse("ERR_INVOKE_POST_ENTITY", fmt.Sprintf("can't serialize to respond: %s", err))
 		respondWithError(c.RequestCtx, fasthttp.StatusInternalServerError, msg)
@@ -91,7 +91,7 @@ func (a *api) onPutEntity(c *routing.Context) error {
 
 	ety := store.Entity{}
 
-	err := a.json.Unmarshal(body, &ety)
+	err := json.Unmarshal(body, &ety)
 	if err != nil {
 		msg := NewErrorResponse("ERR_INVOKE_PUT_ENTITY", fmt.Sprintf("can't deserialize request: %s", err))
 		respondWithError(c.RequestCtx, fasthttp.StatusInternalServerError, msg)
@@ -107,7 +107,7 @@ func (a *api) onPutEntity(c *routing.Context) error {
 		return nil
 	}
 
-	resdata, err := a.json.Marshal(res)
+	resdata, err := json.Marshal(res)
 	if err != nil {
 		msg := NewErrorResponse("ERR_INVOKE_PUT_ENTITY", fmt.Sprintf("can't serialize to respond: %s", err))
 		respondWithError(c.RequestCtx, fasthttp.StatusInternalServerError, msg)
@@ -153,7 +153,7 @@ func (a *api) onGetEntity(c *routing.Context) error {
 		return nil
 	}
 
-	resdata, err := a.json.Marshal(ety)
+	resdata, err := json.Marshal(ety)
 	if err != nil {
 		msg := NewErrorResponse("ERR_INVOKE_GET_ENTITY", fmt.Sprintf("can't serialize to respond: %s", err))
 		respondWithError(c.RequestCtx, fasthttp.StatusInternalServerError, msg)

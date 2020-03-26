@@ -28,8 +28,3 @@ func respondWithError(ctx *fasthttp.RequestCtx, code int, resp ErrorResponse) {
 	b, _ := json.Marshal(&resp)
 	respondWithJSON(ctx, code, b)
 }
-
-func respondEmpty(ctx *fasthttp.RequestCtx, code int) {
-	ctx.Response.SetBody(nil)
-	ctx.Response.SetStatusCode(code)
-}

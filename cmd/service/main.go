@@ -7,32 +7,55 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/AndreasM009/eventstore-go/store/azure/tablestorage"
+	"github.com/AndreasM009/eventstore-go/store"
+	"github.com/AndreasM009/eventstore-service-go/pkg/eventstore"
+
+	"github.com/AndreasM009/eventstore-service-go/pkg/config/standalone"
 	"github.com/AndreasM009/eventstore-service-go/pkg/http"
 )
 
 func main() {
 	// Flags
 	portFlag := flag.Int("port", 5000, "Server port to use")
-	storageAccountNameFlag := flag.String("storageaccountname", "", "name of azure storage account")
-	storageAccountKeyFlag := flag.String("storageaccountkey", "", "key of azure storage account")
+	configFilePathFlag := flag.String("config", "", "path to config file")
 
 	flag.Parse()
 
-	if *storageAccountNameFlag == "" || *storageAccountKeyFlag == "" {
-		flag.Usage()
+	// Configuration
+	cp := standalone.NewStandalone(*configFilePathFlag)
+
+	configuration, err := cp.LoadConfig()
+	if err != nil {
+		log.Fatal(err)
 		return
 	}
 
-	// EventStore
-	eventstore := tablestorage.NewStore(*storageAccountNameFlag, *storageAccountKeyFlag, "")
-	if err := eventstore.Init(); err != nil {
+	// Metadata for EventStore
+	metadata := store.Metadata{
+		Properties: map[string]string{},
+	}
+
+	for _, v := range configuration.Spec.Metadata {
+		metadata.Properties[v.Name] = v.Value
+	}
+
+	// Registry
+	registry := eventstore.NewRegistry()
+
+	// create and init eventstore
+	storage, err := registry.Create(configuration.Spec.Type)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	if err := storage.Init(metadata); err != nil {
 		log.Fatal(err)
 		return
 	}
 
 	// Server
-	s := http.NewServer(*portFlag, eventstore)
+	s := http.NewServer(*portFlag, storage)
 	s.StartNonBlocking()
 
 	fmt.Printf("Server started on port: %d", *portFlag)

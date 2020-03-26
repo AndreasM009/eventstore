@@ -1,5 +1,11 @@
 github.com/AndreasM009/eventstore-go v0.0.0-20200324075015-32b9253ef4db h1:BNsHN+VckD+/yigzhHFdw8+bD2WPjtRC4hT9ea9a+ZU=
 github.com/AndreasM009/eventstore-go v0.0.0-20200324075015-32b9253ef4db/go.mod h1:wNE1d1J1+6rjwiTLPvOsRqfzVBSrN/VeFLZQFv3gebE=
+github.com/AndreasM009/eventstore-go v0.0.0-20200325142432-7aef9da8a13c h1:SuAbAAbOo1tme/pHK0i7/XYoz7g8WL8fAPnpZ+v3PaE=
+github.com/AndreasM009/eventstore-go v0.0.0-20200325142432-7aef9da8a13c/go.mod h1:wNE1d1J1+6rjwiTLPvOsRqfzVBSrN/VeFLZQFv3gebE=
+github.com/AndreasM009/eventstore-go v0.0.0-20200326062320-0d3c3daaa28e h1:xBTZyKDdUbr/icaGMhML/QhDN+1xyDGmKLAD9TKh3SY=
+github.com/AndreasM009/eventstore-go v0.0.0-20200326062320-0d3c3daaa28e/go.mod h1:wNE1d1J1+6rjwiTLPvOsRqfzVBSrN/VeFLZQFv3gebE=
+github.com/AndreasM009/eventstore-go v0.0.0-20200326180455-25f3a2019791 h1:0x6v4pKqR4tAtUKpCdqNnDRxeAZc8A6tJEOZI/rN6XQ=
+github.com/AndreasM009/eventstore-go v0.0.0-20200326180455-25f3a2019791/go.mod h1:wNE1d1J1+6rjwiTLPvOsRqfzVBSrN/VeFLZQFv3gebE=
 github.com/Azure/azure-sdk-for-go v40.5.0+incompatible h1:CVQNKuUepSFBo6BW6gM1J9slPHLRcjn6vaw+j+causw=
 github.com/Azure/azure-sdk-for-go v40.5.0+incompatible/go.mod h1:9XXNKU+eRnpl9moKnB4QOLf1HestfXbmab5FXxiDBjc=
 github.com/Azure/go-autorest/autorest v0.9.0/go.mod h1:xyHB1BMZT0cuDHU7I0+g046+BFDTQ8rEZB0s4Yfa6bI=
@@ -29,11 +35,13 @@ github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 h1:ZqeYNhU3OH
 github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
 github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 h1:Esafd1046DLDQ0W1YjYsBW+p8U2u7vzgW2SQVmlNazg=
 github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742/go.mod h1:bx2lNnkwVCuqBIxFjflWJWanXIb3RllmbCylyMrvgv0=
+github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/qiangxue/fasthttp-routing v0.0.0-20160225050629-6ccdc2a18d87/go.mod h1:zwr0xP4ZJxwCS/g2d+AUOUwfq/j2NC7a1rK3F0ZbVYM=
 github.com/satori/go.uuid v1.2.0/go.mod h1:dA0hQrYB0VpLJoorglMZABFdXlWrHn1NEOzdhQKdks0=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
+github.com/stretchr/testify v1.5.1 h1:nOGnQDM7FYENwehXlg/kFVnos3rEvtKTjRvOWSzb6H4=
 github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5cxcmMvtA=
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
 github.com/valyala/fasthttp v1.9.0/go.mod h1:FstJa9V+Pj9vQ7OJie2qMHdwemEDaDiSdBnvPM1Su9w=
@@ -46,4 +54,5 @@ golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod h1:STP8DvDyc/dI5b8T5h
 golang.org/x/sys v0.0.0-20190412213103-97732733099d/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+gopkg.in/yaml.v2 v2.2.2 h1:ZCJp+EgiOT7lHqUV2J862kp8Qj64Jo6az82+3Td9dZw=
 gopkg.in/yaml.v2 v2.2.2/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=

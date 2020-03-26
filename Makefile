@@ -1,9 +1,34 @@
 ################################################################################
-# Binaries 
+# Variables
 ################################################################################
+export GO111MODULE ?= on
+export GOPROXY ?= https://proxy.golang.org
+export GOSUMDB ?= sum.golang.org
 # By default, disable CGO_ENABLED. See the details on https://golang.org/cmd/cgo
 CGO         ?= 0
 BINARIES ?= service
+
+################################################################################
+# Git info
+################################################################################
+GIT_COMMIT  = $(shell git rev-list -1 HEAD)
+GIT_VERSION = $(shell git describe --always --abbrev=7 --dirty)
+
+################################################################################
+# Release version, name and docker tags
+################################################################################
+LASTEST_VERSION_TAG ?=
+
+ifdef REL_VERSION
+	EVENTSTORE_VERSION := $(REL_VERSION)
+	EVENTSTORE_TAG := $(REL_VERSION) 
+else
+	EVENTSTORE_VERSION := edge
+	EVENTSTORE_TAG := edge
+endif
+
+LATEST_TAG := latest
+RELEASE_NAME := eventstore
 
 ################################################################################
 # Architectue
@@ -46,8 +71,12 @@ endif
 
 export BINARY_EXT ?= $(BINARY_EXT_LOCAL)
 
-#go flags
-DEFAULT_LDFLAGS=
+################################################################################
+# GO build flags
+################################################################################
+BASE_PACKAGE_NAME := github.com/AndreasM009/eventstore-service-go
+
+DEFAULT_LDFLAGS := -X $(BASE_PACKAGE_NAME)/pkg/version.commit=$(GIT_VERSION) -X $(BASE_PACKAGE_NAME)/pkg/version.version=$(EVENTSTORE_VERSION)
 ifeq ($(DEBUG),)
   BUILDTYPE_DIR:=release
   LDFLAGS:="$(DEFAULT_LDFLAGS) -s -w"
@@ -69,7 +98,24 @@ EVENTSTORE_OUT_DIR := $(OUT_DIR)/$(GOOS)_$(GOARCH)/$(BUILDTYPE_DIR)
 EVENTSTORE_LINUX_OUT_DIR := $(OUT_DIR)/linux_$(GOARCH)/$(BUILDTYPE_DIR)
 
 ################################################################################
-# Target: build                                                                #
+# Docker
+################################################################################
+DOCKER := docker
+DOCKERFILE_DIR ?= ./docker
+
+ifeq ($(DEBUG),)
+  DOCKERFILE := Dockerfile
+else ifeq ($(DEBUG),0)
+  DOCKERFILE := Dockerfile
+else
+  DOCKERFILE := Dockerfile
+endif
+
+DOCKER_IMAGE_TAG := $(RELEASE_NAME):$(EVENTSTORE_TAG)
+
+
+################################################################################
+# Target: build                                                                
 ################################################################################
 .PHONY: build
 EVENTSTORE_BINS:=$(foreach ITEM,$(BINARIES),$(EVENTSTORE_OUT_DIR)/$(ITEM)$(BINARY_EXT))
@@ -92,3 +138,24 @@ endef
 
 # Generate binary targets
 $(foreach ITEM,$(BINARIES),$(eval $(call genBinariesForTarget,$(ITEM)$(BINARY_EXT),./cmd/$(ITEM),$(GOOS),$(GOARCH),$(EVENTSTORE_OUT_DIR))))
+
+################################################################################
+# Target: lint                                                                
+################################################################################
+.PHONY: lint	
+lint:
+	$(GOLANGCI_LINT) run --fix
+
+################################################################################
+# Target: docker-image
+################################################################################
+.PHONY: docker-image
+docker-build:
+	$(DOCKER) build -t $(DOCKER_IMAGE_TAG) -f $(DOCKERFILE_DIR)/$(DOCKERFILE) .
+
+################################################################################
+# Target: test
+################################################################################
+.PHONY: test
+test:
+	go test ./pkg/...
