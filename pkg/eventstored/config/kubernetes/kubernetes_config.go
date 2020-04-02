@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/AndreasM009/eventstore-service-go/pkg/config"
+	"github.com/AndreasM009/eventstore-service-go/pkg/eventstored/config"
 )
 
 type kubernetesConfigurationProvider struct {

@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/AndreasM009/eventstore-service-go/pkg/runtime"
+	"github.com/AndreasM009/eventstore-service-go/pkg/eventstored/runtime"
 )
 
 func main() {
