@@ -1,0 +1,17 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: eventstore-injector
+webhooks:
+  - name: eventstore-injector.${NAMESPACE}.svc
+    clientConfig:
+      service:
+        name: eventstore-injector
+        namespace: ${NAMESPACE}
+        path: "/mutate"
+      caBundle: ${CA_BUNDLE}
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]

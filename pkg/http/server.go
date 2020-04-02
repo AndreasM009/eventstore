@@ -35,7 +35,6 @@ func (s *server) StartNonBlocking() {
 
 	go func() {
 		err := fasthttp.ListenAndServe(fmt.Sprintf(":%v", s.port), s.router.HandleRequest)
-
 		if err != nil {
 			fmt.Println(err)
 		}

@@ -6,7 +6,7 @@ export GOPROXY ?= https://proxy.golang.org
 export GOSUMDB ?= sum.golang.org
 # By default, disable CGO_ENABLED. See the details on https://golang.org/cmd/cgo
 CGO         ?= 0
-BINARIES ?= service
+BINARIES ?= eventstored injector
 
 ################################################################################
 # Git info
@@ -21,14 +21,14 @@ LASTEST_VERSION_TAG ?=
 
 ifdef REL_VERSION
 	EVENTSTORE_VERSION := $(REL_VERSION)
-	EVENTSTORE_TAG := $(REL_VERSION) 
+	EVENTSTORE_TAG := latest 
 else
 	EVENTSTORE_VERSION := edge
 	EVENTSTORE_TAG := edge
 endif
 
 LATEST_TAG := latest
-RELEASE_NAME := eventstore
+RELEASE_NAME := eventstored
 
 ################################################################################
 # Architectue
@@ -112,7 +112,12 @@ else
 endif
 
 DOCKER_IMAGE_TAG := $(RELEASE_NAME):$(EVENTSTORE_TAG)
+DOCKER_IMAGE_VERSION := $(RELEASE_NAME):$(EVENTSTORE_VERSION)
 
+################################################################################
+# k8s
+################################################################################
+INJECTOR_NAMESPACE := eventstore
 
 ################################################################################
 # Target: build                                                                
@@ -152,6 +157,30 @@ lint:
 .PHONY: docker-image
 docker-build:
 	$(DOCKER) build -t $(DOCKER_IMAGE_TAG) -f $(DOCKERFILE_DIR)/$(DOCKERFILE) .
+
+check-docker-publish-args:
+ifeq ($(dockerserver),)
+	$(error docker server must be set: dockerserver=<dockerserver>)
+endif
+ifeq ($(dockerusername),)
+	$(error docker login must be set: dockerlogin=<dockerusername>)
+endif
+ifeq ($(dockerpassword),)
+	$(error docker password must be set: dockerpassword=<dockerpassword>)
+endif
+
+.PHONY: docker-publish
+docker-publish: check-docker-publish-args
+	$(DOCKER) login -p $(dockerpassword) -u $(dockerusername)
+	$(DOCKER) build -t $(dockerserver)/$(DOCKER_IMAGE_VERSION) -f $(DOCKERFILE_DIR)/$(DOCKERFILE) .
+	$(DOCKER) tag $(dockerserver)/$(DOCKER_IMAGE_VERSION) $(dockerserver)/$(DOCKER_IMAGE_TAG)
+	$(DOCKER) push $(dockerserver)/$(DOCKER_IMAGE_VERSION)
+	$(DOCKER) push $(dockerserver)/$(DOCKER_IMAGE_TAG)
+
+.PHONY: k8s-build
+k8s-build:
+	mkdir -p ./dist/k8s/
+	./deploy/create-injector-deployment.sh --namespace $(INJECTOR_NAMESPACE) --input ./deploy/k8s --output ./dist/k8s
 
 ################################################################################
 # Target: test

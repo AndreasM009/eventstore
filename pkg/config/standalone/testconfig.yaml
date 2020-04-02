@@ -4,7 +4,7 @@ metadata:
 spec:
   type: eventstore.azure.tablestorage
   metadata:
-  - name: storageAccount
+  - name: storageAccountName
     value: "testaccount"
   - name: storageAccountKey
     value: "testaccountkey"

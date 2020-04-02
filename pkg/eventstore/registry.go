@@ -40,7 +40,7 @@ func (r *eventstoreRegistry) Create(name string) (store.EventStore, error) {
 	factory, ok := r.factory[name]
 
 	if !ok {
-		return nil, fmt.Errorf("registry: can't create evenstore %s", name)
+		return nil, fmt.Errorf("registry: can't create eventstore %s", name)
 	}
 
 	return factory(), nil
