@@ -18,7 +18,7 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 	sigchannel := make(chan os.Signal)
-	signal.Notify(sigchannel, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(sigchannel, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 
 	i := injector.NewInjector()
 	cfg, err := injector.NewConfigFromEnvironment()

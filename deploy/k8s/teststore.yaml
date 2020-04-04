@@ -1,0 +1,11 @@
+apiVersion: eventstore.io/v1alpha1
+kind: Eventstore
+metadata:
+  name: example-eventstore
+spec:
+  type: teststore
+  metadata:
+    - name: storageAccounName
+      value: "test"
+    - name: storageAccountKey
+      value: "test"

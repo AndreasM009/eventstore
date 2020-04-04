@@ -6,7 +6,7 @@ export GOPROXY ?= https://proxy.golang.org
 export GOSUMDB ?= sum.golang.org
 # By default, disable CGO_ENABLED. See the details on https://golang.org/cmd/cgo
 CGO         ?= 0
-BINARIES ?= eventstored injector
+BINARIES ?= eventstored injector operator
 
 ################################################################################
 # Git info
