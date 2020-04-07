@@ -6,6 +6,6 @@ spec:
   type: eventstore.azure.tablestorage
   metadata:
     - name: storageAccountName
-      value: "anmockevtstore"
+      value: ""
     - name: storageAccountKey
-      value: "ZDJZMevoPudEDYmLkb6TGBYXjgHbNQOxKUJqWzzJp7VgTcJSXBa9ZTbW1dKPe0KV5TD9BNKJpkUi8ecBrGQNvw=="
+      value: ""
