@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
+	"syscall"
 
 	"github.com/AndreasM009/eventstore-service-go/pkg/eventstored/runtime"
 )
@@ -13,16 +15,15 @@ func main() {
 
 	if err := r.FromFlags(); err != nil {
 		fmt.Println(err)
-		return
 	}
 
 	if err := r.Start(); err != nil {
-		return
+		log.Println(err)
 	}
 
 	// Block, until SIGINT (Ctrl+C)
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
+	c := make(chan os.Signal)
+	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 
 	// Block until we receive our signal.
 	<-c

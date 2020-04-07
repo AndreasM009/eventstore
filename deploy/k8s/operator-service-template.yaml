@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: eventstore-operator
+  namespace: ${NAMESPACE}
+  labels:
+    app: eventstore-operator
+spec:
+  ports:
+  - port: 80
+    targetPort: 5000
+  selector:
+    app: eventstore-operator

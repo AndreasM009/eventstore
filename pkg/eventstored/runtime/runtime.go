@@ -22,10 +22,11 @@ const (
 )
 
 var (
-	modeFlag             = flag.String("mode", "standalone", "Run mode: 'standalone' or 'kubernetes'")
-	portFlag             = flag.Int("port", 5000, "Server port to use")
-	configFilePathFlag   = flag.String("config", "", "Path to config file.")
-	eventStoreNamesFlags = flag.String("eventstores", "", "Comma separated names of eventstores that are associated with the Application Pod (Kubernetes only).")
+	modeFlag              = flag.String("mode", "standalone", "Run mode: 'standalone' or 'kubernetes'")
+	portFlag              = flag.Int("port", 5000, "Server port to use")
+	configFilePathFlag    = flag.String("config", "", "Path to config file (standalone only).")
+	eventStoreNamesFlags  = flag.String("eventstores", "", "Comma separated names of eventstores that are associated with the Application Pod (Kubernetes only).")
+	operatorEndpointFlags = flag.String("operatorendpoint", "", "Endpoint of operator control plane (kubernetes only).")
 )
 
 // Runtime interface to run an EventStore
@@ -61,7 +62,7 @@ func (r *runtime) FromFlags() error {
 			return err
 		}
 	case modeKubernetes:
-		cfgProvider, err := kubernetesConfig.NewKubernetes(*eventStoreNamesFlags)
+		cfgProvider, err := kubernetesConfig.NewKubernetes(*eventStoreNamesFlags, *operatorEndpointFlags)
 		if err != nil {
 			return err
 		}

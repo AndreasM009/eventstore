@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventstore-operator
+  namespace: ${NAMESPACE}
+  labels:
+    app: eventstored
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventstore-operator
+  template:
+    metadata:
+      labels:
+        app: eventstore-operator
+    spec:
+      serviceAccountName: eventstore-operator
+      containers:
+        - name: eventstored
+          image: m009/eventstored:0.01
+          imagePullPolicy: Always
+          args:
+            - ./operator
+            - -port=5000

@@ -129,7 +129,7 @@ func (i *injector) handleRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	patchOps = i.patchPod(pod)
+	patchOps = i.patchPod(pod, i.config.Namespace)
 	if len(patchOps) == 0 {
 		admissionResponse = &v1beta1.AdmissionResponse{
 			Allowed: true,

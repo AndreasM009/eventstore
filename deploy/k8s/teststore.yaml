@@ -1,11 +1,11 @@
 apiVersion: eventstore.io/v1alpha1
 kind: Eventstore
 metadata:
-  name: example-eventstore
+  name: myeventstore
 spec:
-  type: teststore
+  type: eventstore.azure.tablestorage
   metadata:
-    - name: storageAccounName
-      value: "test"
+    - name: storageAccountName
+      value: "anmockevtstore"
     - name: storageAccountKey
-      value: "test"
+      value: "ZDJZMevoPudEDYmLkb6TGBYXjgHbNQOxKUJqWzzJp7VgTcJSXBa9ZTbW1dKPe0KV5TD9BNKJpkUi8ecBrGQNvw=="

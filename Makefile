@@ -117,7 +117,7 @@ DOCKER_IMAGE_VERSION := $(RELEASE_NAME):$(EVENTSTORE_VERSION)
 ################################################################################
 # k8s
 ################################################################################
-INJECTOR_NAMESPACE := eventstore
+EVENTSTORE_NAMESPACE := eventstore
 
 ################################################################################
 # Target: build                                                                
@@ -180,7 +180,7 @@ docker-publish: check-docker-publish-args
 .PHONY: k8s-build
 k8s-build:
 	mkdir -p ./dist/k8s/
-	./deploy/create-injector-deployment.sh --namespace $(INJECTOR_NAMESPACE) --input ./deploy/k8s --output ./dist/k8s
+	./deploy/create-deployments.sh --namespace $(EVENTSTORE_NAMESPACE) --input ./deploy/k8s --output ./dist/k8s
 
 ################################################################################
 # Target: test

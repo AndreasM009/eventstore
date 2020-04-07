@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"log"
 	"os"
 	"os/signal"
@@ -11,9 +12,13 @@ import (
 	eventstoreclient "github.com/AndreasM009/eventstore-service-go/pkg/client/clientset/versioned"
 	"github.com/AndreasM009/eventstore-service-go/pkg/factories"
 	"github.com/AndreasM009/eventstore-service-go/pkg/operator"
+	"github.com/AndreasM009/eventstore-service-go/pkg/operator/http"
 )
 
 func main() {
+	apiPortFlags := flag.Int("port", 5000, "api server's port")
+	flag.Parse()
+
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -36,6 +41,10 @@ func main() {
 		log.Println("Failed to start operator")
 		return
 	}
+
+	server := http.NewServer(*apiPortFlags, eventStoreClient)
+
+	server.StartNonBlocking()
 
 	select {
 	case <-sigchannel:

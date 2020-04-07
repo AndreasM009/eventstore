@@ -9,7 +9,7 @@ import (
 func TestEmptyEventstores(t *testing.T) {
 	stores := ""
 
-	cfg, err := NewKubernetes(stores)
+	cfg, err := NewKubernetes(stores, "")
 	assert.NotNil(t, err)
 	assert.Nil(t, cfg)
 }
@@ -17,7 +17,7 @@ func TestEmptyEventstores(t *testing.T) {
 func TestSplitEventStores(t *testing.T) {
 	stores := "a,b,c,d"
 
-	cfg, err := NewKubernetes(stores)
+	cfg, err := NewKubernetes(stores, "")
 	assert.Nil(t, err)
 	assert.NotNil(t, cfg)
 
@@ -32,7 +32,7 @@ func TestSplitEventStores(t *testing.T) {
 func TestSplitEventStoresSpaces(t *testing.T) {
 	stores := "a, b, c, d"
 
-	cfg, err := NewKubernetes(stores)
+	cfg, err := NewKubernetes(stores, "")
 	assert.Nil(t, err)
 	assert.NotNil(t, cfg)
 
@@ -47,7 +47,7 @@ func TestSplitEventStoresSpaces(t *testing.T) {
 func TestSplitEventStoresWithQuotes(t *testing.T) {
 	stores := "'a,b,c,d'"
 
-	cfg, err := NewKubernetes(stores)
+	cfg, err := NewKubernetes(stores, "")
 	assert.Nil(t, err)
 	assert.NotNil(t, cfg)
 
