@@ -26,5 +26,5 @@ type Configuration struct {
 
 // ConfigurationProvider interface
 type ConfigurationProvider interface {
-	LoadConfig() (*Configuration, error)
+	LoadConfig() ([]Configuration, error)
 }

@@ -16,16 +16,16 @@ type Server interface {
 type server struct {
 	api      APIRoutes
 	port     int
-	evtstore store.EventStore
+	evtstore map[string]store.EventStore
 	router   *routing.Router
 }
 
 // NewServer creates a new API Server
-func NewServer(port int, eventStore store.EventStore) Server {
+func NewServer(port int, eventStores map[string]store.EventStore) Server {
 	return &server{
 		port:     port,
-		evtstore: eventStore,
-		api:      NewAPI(eventStore),
+		evtstore: eventStores,
+		api:      NewAPI(eventStores),
 	}
 }
 

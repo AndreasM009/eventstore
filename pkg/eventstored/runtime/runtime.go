@@ -38,7 +38,7 @@ type Runtime interface {
 type runtime struct {
 	started  bool
 	registry eventstore.Registry
-	store    store.EventStore
+	stores   map[string]store.EventStore
 	server   http.Server
 }
 
@@ -50,7 +50,7 @@ func NewRuntime() Runtime {
 func (r *runtime) FromFlags() error {
 	flag.Parse()
 
-	var cfg *config.Configuration
+	var cfg []config.Configuration
 	var err error
 
 	switch *modeFlag {
@@ -74,33 +74,20 @@ func (r *runtime) FromFlags() error {
 		return fmt.Errorf("runtime: unknown runtime mode %s", *modeFlag)
 	}
 
-	// Metadata for EventStore
-	metadata := store.Metadata{
-		Properties: map[string]string{},
-	}
-
-	for _, v := range cfg.Spec.Metadata {
-		metadata.Properties[v.Name] = v.Value
-	}
-
 	r.registry = eventstore.NewRegistry()
-	r.store, err = r.registry.Create(cfg.Spec.Type)
+	r.stores, err = r.registry.CreateFromConfiguration(cfg)
 	if err != nil {
 		return err
 	}
 
-	if err := r.store.Init(metadata); err != nil {
-		return err
-	}
-
-	r.server = http.NewServer(*portFlag, r.store)
+	r.server = http.NewServer(*portFlag, r.stores)
 
 	return nil
 }
 
 func (r *runtime) Start() error {
 
-	if r.server == nil || r.registry == nil || r.store == nil {
+	if r.server == nil || r.registry == nil {
 		return errors.New("runtime: runtime not initialized correctly")
 	}
 

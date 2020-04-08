@@ -19,18 +19,20 @@ func NewStandalone(filePath string) config.ConfigurationProvider {
 	}
 }
 
-func (p *standalongConfigurationProvider) LoadConfig() (*config.Configuration, error) {
+func (p *standalongConfigurationProvider) LoadConfig() ([]config.Configuration, error) {
 	data, err := ioutil.ReadFile(p.configFilePath)
 	if err != nil {
 		return nil, fmt.Errorf("standalone config: can't read config file: %s", err)
 	}
 
-	config := &config.Configuration{}
+	cnfg := config.Configuration{}
 
-	err = yaml.Unmarshal(data, &config)
+	err = yaml.Unmarshal(data, &cnfg)
 	if err != nil {
 		return nil, fmt.Errorf("standalone config: can't read yaml in config file: %s", err)
 	}
 
-	return config, nil
+	result := []config.Configuration{cnfg}
+
+	return result, nil
 }

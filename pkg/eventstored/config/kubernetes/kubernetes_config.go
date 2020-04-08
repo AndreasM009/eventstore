@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 
@@ -13,7 +12,6 @@ import (
 )
 
 type kubernetesConfigurationProvider struct {
-	// todo: add client to request Configuration from ControlPlane (operator)
 	evenstoreNames   []string
 	operatorEndpoint string
 }
@@ -36,7 +34,7 @@ func NewKubernetes(eventstoreNames, operatorEndpoint string) (config.Configurati
 	}, nil
 }
 
-func (k *kubernetesConfigurationProvider) LoadConfig() (*config.Configuration, error) {
+func (k *kubernetesConfigurationProvider) LoadConfig() ([]config.Configuration, error) {
 	url := fmt.Sprintf("%s/eventstores", k.operatorEndpoint)
 
 	resp, err := http.Get(url)
@@ -63,15 +61,39 @@ func (k *kubernetesConfigurationProvider) LoadConfig() (*config.Configuration, e
 		return nil, errors.New("No configration available")
 	}
 
-	log.Println(string(body))
+	// log.Println(string(body))
 
-	data, err := json.Marshal(configs)
-	if err != nil {
-		log.Println("Error serilaize configs")
-		return nil, nil
+	// data, err := json.Marshal(configs)
+	// if err != nil {
+	// 	log.Println("Error serilaize configs")
+	// 	return nil, nil
+	// }
+
+	// log.Println(string(data))
+
+	result := k.filterConfigs(configs)
+
+	return *result, nil
+}
+
+func (k *kubernetesConfigurationProvider) filterConfigs(cfgs []config.Configuration) *[]config.Configuration {
+	result := []config.Configuration{}
+
+	for _, v := range cfgs {
+		if containsStoreName(k.evenstoreNames, v.Metadata.Name) {
+			result = append(result, v)
+		}
 	}
 
-	log.Println(string(data))
+	return &result
+}
 
-	return &configs[0], nil
+func containsStoreName(names []string, name string) bool {
+	for _, v := range names {
+		if v == name {
+			return true
+		}
+	}
+
+	return false
 }

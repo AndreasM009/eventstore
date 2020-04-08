@@ -1,18 +1,23 @@
 package eventstore
 
 import (
+	"errors"
 	"fmt"
+	"log"
+	"strings"
 
 	"github.com/AndreasM009/eventstore-go/store/azure/tablestorage"
 
 	"github.com/AndreasM009/eventstore-go/store/inmemory"
 
 	"github.com/AndreasM009/eventstore-go/store"
+	"github.com/AndreasM009/eventstore-service-go/pkg/eventstored/config"
 )
 
 // Registry interface
 type Registry interface {
 	Create(name string) (store.EventStore, error)
+	CreateFromConfiguration(configs []config.Configuration) (map[string]store.EventStore, error)
 }
 
 type eventstoreRegistry struct {
@@ -44,4 +49,37 @@ func (r *eventstoreRegistry) Create(name string) (store.EventStore, error) {
 	}
 
 	return factory(), nil
+}
+
+func (r *eventstoreRegistry) CreateFromConfiguration(configs []config.Configuration) (map[string]store.EventStore, error) {
+	builder := strings.Builder{}
+	resultmap := map[string]store.EventStore{}
+
+	for _, v := range configs {
+		s, err := r.Create(v.Spec.Type)
+		if err != nil {
+			builder.WriteString(fmt.Sprintf("%s\n", err))
+		} else {
+			metadata := store.Metadata{
+				Properties: map[string]string{},
+			}
+
+			for _, m := range v.Spec.Metadata {
+				metadata.Properties[m.Name] = m.Value
+			}
+
+			if err := s.Init(metadata); err != nil {
+				builder.WriteString(fmt.Sprintf("%s\n", err))
+			}
+
+			log.Printf("registry: Eventstore '%s' initialized\n", v.Metadata.Name)
+			resultmap[v.Metadata.Name] = s
+		}
+	}
+
+	if builder.Len() != 0 {
+		return resultmap, errors.New(builder.String())
+	}
+
+	return resultmap, nil
 }

@@ -25,33 +25,42 @@ type APIRoutes interface {
 }
 
 type api struct {
-	evtstore store.EventStore
+	evtstores map[string]store.EventStore
 }
 
 const (
-	entityIDParam     = "id"
-	versionQueryParam = "version"
+	eventstoreNameParam = "name"
+	entityIDParam       = "id"
+	versionQueryParam   = "version"
 )
 
 // NewAPI creates a new server instance
-func NewAPI(evtstore store.EventStore) APIRoutes {
+func NewAPI(evtstores map[string]store.EventStore) APIRoutes {
 	api := &api{
-		evtstore: evtstore,
+		evtstores: evtstores,
 	}
 	return api
 }
 
 func (a *api) RegisterRoutes(r *routing.Router) {
-	r.Post("/entities/<id>", a.onPostEntity)
-	r.Put("/entities/<id>", a.onPutEntity)
-	r.Get("/entities/<id>", a.onGetEntity)
+	r.Post("eventstores/<name>/entities/<id>", a.onPostEntity)
+	r.Put("eventstores/<name>/entities/<id>", a.onPutEntity)
+	r.Get("eventstores/<name>/entities/<id>", a.onGetEntity)
 }
 
 func (a *api) onPostEntity(c *routing.Context) error {
 	id := c.Param(entityIDParam)
+	name := c.Param(eventstoreNameParam)
 	body := c.PostBody()
 
 	fmt.Println(string(body))
+
+	eventstore, ok := a.evtstores[name]
+	if !ok {
+		msg := NewErrorResponse("ERR_INVOKE_POST_ENTITY", fmt.Sprintf("Evenstore %s not found", name))
+		respondWithError(c.RequestCtx, fasthttp.StatusNotFound, msg)
+		return nil
+	}
 
 	ety := store.Entity{}
 
@@ -65,7 +74,7 @@ func (a *api) onPostEntity(c *routing.Context) error {
 	ety.ID = id
 	ety.Version = 0
 
-	res, err := a.evtstore.Add(&ety)
+	res, err := eventstore.Add(&ety)
 	if err != nil {
 		msg := NewErrorResponse("ERR_INVOKE_POST_ENTITY", fmt.Sprintf("can't append entity to eventstore: %s", err))
 		respondWithError(c.RequestCtx, fasthttp.StatusInternalServerError, msg)
@@ -87,7 +96,15 @@ func (a *api) onPostEntity(c *routing.Context) error {
 
 func (a *api) onPutEntity(c *routing.Context) error {
 	id := c.Param(entityIDParam)
+	name := c.Param(eventstoreNameParam)
 	body := c.PostBody()
+
+	eventstore, ok := a.evtstores[name]
+	if !ok {
+		msg := NewErrorResponse("ERR_INVOKE_PUT_ENTITY", fmt.Sprintf("Evenstore %s not found", name))
+		respondWithError(c.RequestCtx, fasthttp.StatusNotFound, msg)
+		return nil
+	}
 
 	ety := store.Entity{}
 
@@ -100,7 +117,7 @@ func (a *api) onPutEntity(c *routing.Context) error {
 
 	ety.ID = id
 
-	res, err := a.evtstore.Append(&ety)
+	res, err := eventstore.Append(&ety)
 	if err != nil {
 		msg := NewErrorResponse("ERR_INVOKE_PUT_ENTITY", fmt.Sprintf("can't add entity to eventstore: %s", err))
 		respondWithError(c.RequestCtx, fasthttp.StatusInternalServerError, msg)
@@ -122,7 +139,15 @@ func (a *api) onGetEntity(c *routing.Context) error {
 	var version int64
 
 	id := c.Param(entityIDParam)
+	name := c.Param(eventstoreNameParam)
 	vstr := c.QueryArgs().Peek(versionQueryParam)
+
+	eventstore, ok := a.evtstores[name]
+	if !ok {
+		msg := NewErrorResponse("ERR_INVOKE_GET_ENTITY", fmt.Sprintf("Evenstore %s not found", name))
+		respondWithError(c.RequestCtx, fasthttp.StatusNotFound, msg)
+		return nil
+	}
 
 	if vstr != nil {
 		v, err := strconv.ParseInt(string(vstr), 10, 64)
@@ -135,7 +160,7 @@ func (a *api) onGetEntity(c *routing.Context) error {
 
 		version = v
 	} else {
-		v, err := a.evtstore.GetLatestVersionNumber(id)
+		v, err := eventstore.GetLatestVersionNumber(id)
 		if err != nil {
 			msg := NewErrorResponse("ERR_INVOKE_GET_ENTITY", fmt.Sprintf("can't get latest version: %s", err))
 			respondWithError(c.RequestCtx, fasthttp.StatusNotFound, msg)
@@ -145,7 +170,7 @@ func (a *api) onGetEntity(c *routing.Context) error {
 		version = v
 	}
 
-	ety, err := a.evtstore.GetByVersion(id, version)
+	ety, err := eventstore.GetByVersion(id, version)
 
 	if err != nil {
 		msg := NewErrorResponse("ERR_INVOKE_GET_ENTITY", fmt.Sprintf("can't load entity: %s", err))

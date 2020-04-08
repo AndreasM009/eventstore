@@ -11,6 +11,7 @@ require (
 	github.com/qiangxue/fasthttp-routing v0.0.0-20160225050629-6ccdc2a18d87
 	github.com/stretchr/testify v1.5.1
 	github.com/valyala/fasthttp v1.9.0
+	go.etcd.io/etcd v3.3.20+incompatible
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
 	gopkg.in/yaml.v2 v2.2.8
