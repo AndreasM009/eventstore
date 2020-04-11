@@ -12,9 +12,12 @@ package http
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/AndreasM009/eventstore-go/store"
+	"github.com/AndreasM009/eventstore-service-go/pkg/eventstored/config"
+	registry "github.com/AndreasM009/eventstore-service-go/pkg/eventstored/eventstore"
 	routing "github.com/qiangxue/fasthttp-routing"
 	"github.com/valyala/fasthttp"
 )
@@ -26,6 +29,7 @@ type APIRoutes interface {
 
 type api struct {
 	evtstores map[string]store.EventStore
+	registry  registry.Registry
 }
 
 const (
@@ -35,17 +39,19 @@ const (
 )
 
 // NewAPI creates a new server instance
-func NewAPI(evtstores map[string]store.EventStore) APIRoutes {
+func NewAPI(evtstores map[string]store.EventStore, registry registry.Registry) APIRoutes {
 	api := &api{
 		evtstores: evtstores,
+		registry:  registry,
 	}
 	return api
 }
 
 func (a *api) RegisterRoutes(r *routing.Router) {
-	r.Post("eventstores/<name>/entities/<id>", a.onPostEntity)
-	r.Put("eventstores/<name>/entities/<id>", a.onPutEntity)
-	r.Get("eventstores/<name>/entities/<id>", a.onGetEntity)
+	r.Post("/eventstores/<name>/entities/<id>", a.onPostEntity)
+	r.Put("/eventstores/<name>/entities/<id>", a.onPutEntity)
+	r.Get("/eventstores/<name>/entities/<id>", a.onGetEntity)
+	r.Post("/configurations/<name>", a.onPostConfiguration)
 }
 
 func (a *api) onPostEntity(c *routing.Context) error {
@@ -186,5 +192,39 @@ func (a *api) onGetEntity(c *routing.Context) error {
 	}
 
 	respondWithJSON(c.RequestCtx, fasthttp.StatusOK, resdata)
+	return nil
+}
+
+func (a *api) onPostConfiguration(c *routing.Context) error {
+	name := c.Param(eventstoreNameParam)
+	body := c.PostBody()
+
+	_, ok := a.evtstores[name]
+
+	if !ok {
+		// not my configuration
+		respondWithStatus(c.RequestCtx, fasthttp.StatusOK)
+		return nil
+	}
+
+	cfg := config.Configuration{}
+	err := json.Unmarshal(body, &cfg)
+
+	if err != nil {
+		respondWithStatus(c.RequestCtx, fasthttp.StatusInternalServerError)
+		log.Printf("api: configuration can't be deserialized: %s", err)
+		return nil
+	}
+
+	s, err := a.registry.Create(cfg)
+	if err != nil {
+		log.Printf("api: failed to update store from configuration: %s", err)
+		respondWithStatus(c.RequestCtx, fasthttp.StatusInternalServerError)
+		return nil
+	}
+
+	a.evtstores[cfg.Metadata.Name] = s
+	log.Printf("api: configuration for Eventstore %s updated", cfg.Metadata.Name)
+	respondWithStatus(c.RequestCtx, fasthttp.StatusOK)
 	return nil
 }

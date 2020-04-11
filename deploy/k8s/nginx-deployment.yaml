@@ -15,6 +15,7 @@ spec:
         eventstore/enabled: "true"
         eventstore/names: "myeventstore"
         eventstore/port: "5600"
+        eventstore/appid: "mynginx"
     spec:
       containers:
       - name: my-nginx

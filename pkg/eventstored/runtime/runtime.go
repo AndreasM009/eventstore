@@ -59,7 +59,7 @@ func (r *runtime) FromFlags() error {
 
 		cfg, err = cfgProvider.LoadConfig()
 		if err != nil {
-			return err
+			log.Println(err)
 		}
 	case modeKubernetes:
 		cfgProvider, err := kubernetesConfig.NewKubernetes(*eventStoreNamesFlags, *operatorEndpointFlags)
@@ -77,10 +77,10 @@ func (r *runtime) FromFlags() error {
 	r.registry = eventstore.NewRegistry()
 	r.stores, err = r.registry.CreateFromConfiguration(cfg)
 	if err != nil {
-		return err
+		log.Printf("runtime: %s\n", err)
 	}
 
-	r.server = http.NewServer(*portFlag, r.stores)
+	r.server = http.NewServer(*portFlag, r.stores, r.registry)
 
 	return nil
 }

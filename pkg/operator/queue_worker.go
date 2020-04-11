@@ -57,23 +57,23 @@ func (qw *queueworker) runWorker() {
 }
 
 func (qw *queueworker) processItems() bool {
-	key, quit := qw.queue.Get()
+	obj, quit := qw.queue.Get()
 	if quit {
 		return false
 	}
 
 	// indicate queue that we have done a piece of work
-	defer qw.queue.Done(key)
+	defer qw.queue.Done(obj)
 
-	err := qw.processItem(key.(string))
+	err := qw.processItem(obj)
 
 	if err == nil {
-		qw.queue.Forget(key)
-	} else if qw.queue.NumRequeues(key) < 20 {
-		qw.queue.AddRateLimited(key)
+		qw.queue.Forget(obj)
+	} else if qw.queue.NumRequeues(obj) < 20 {
+		qw.queue.AddRateLimited(obj)
 	} else {
-		qw.queue.Forget(key)
-		err := fmt.Errorf("Worker %s, error processing %s (giving up): %v", qw.name, key, err)
+		qw.queue.Forget(obj)
+		err := fmt.Errorf("Worker %s, error processing (giving up): %v", qw.name, err)
 		log.Println(err)
 		utilruntime.HandleError(err)
 	}
@@ -81,20 +81,16 @@ func (qw *queueworker) processItems() bool {
 	return true
 }
 
-func (qw *queueworker) processItem(key string) error {
-	log.Printf("worker %s processing change to %s\n", qw.name, key)
-
-	obj, exists, err := qw.informer.GetIndexer().GetByKey(key)
+func (qw *queueworker) processItem(obj interface{}) error {
+	qobj, exists, err := qw.informer.GetIndexer().Get(obj)
 
 	if err != nil {
-		return fmt.Errorf("worker %s Error fetching object with key %s", qw.name, key)
+		return fmt.Errorf("worker %s Error fetching object", qw.name)
 	}
 
 	if !exists {
-		log.Printf("Eventstore %s was deleted\n", key)
 		return qw.deletedEvent(obj)
 	}
 
-	log.Printf("Eventstore %s was added or updated\n", key)
-	return qw.changedEvent(obj)
+	return qw.changedEvent(qobj)
 }

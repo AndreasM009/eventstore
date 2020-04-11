@@ -13,6 +13,7 @@ import (
 	"github.com/AndreasM009/eventstore-service-go/pkg/factories"
 	"github.com/AndreasM009/eventstore-service-go/pkg/operator"
 	"github.com/AndreasM009/eventstore-service-go/pkg/operator/http"
+	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 )
 
 func main() {
@@ -34,7 +35,19 @@ func main() {
 		return
 	}
 
-	operator := operator.NewOperator(eventStoreClient, kubeClient)
+	extensionClient, err := apiextensionsclient.NewForConfig(config)
+	if err != nil {
+		log.Printf("Failed to create ApiExtension client %v\n", err)
+		return
+	}
+
+	operator := operator.NewOperator(eventStoreClient, kubeClient, extensionClient)
+
+	err = operator.InitCustomResourceDefinitions()
+	if err != nil {
+		log.Printf("Error creating CustomResoiurceDefinition: %s\n", err)
+		return
+	}
 
 	done, err := operator.Run(ctx)
 	if err != nil {

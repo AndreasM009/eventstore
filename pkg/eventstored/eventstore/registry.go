@@ -16,7 +16,7 @@ import (
 
 // Registry interface
 type Registry interface {
-	Create(name string) (store.EventStore, error)
+	Create(cfg config.Configuration) (store.EventStore, error)
 	CreateFromConfiguration(configs []config.Configuration) (map[string]store.EventStore, error)
 }
 
@@ -41,14 +41,28 @@ func NewRegistry() Registry {
 	return r
 }
 
-func (r *eventstoreRegistry) Create(name string) (store.EventStore, error) {
-	factory, ok := r.factory[name]
+func (r *eventstoreRegistry) Create(cfg config.Configuration) (store.EventStore, error) {
+	factory, ok := r.factory[cfg.Spec.Type]
 
 	if !ok {
-		return nil, fmt.Errorf("registry: can't create eventstore %s", name)
+		return nil, fmt.Errorf("registry: can't create eventstore %s", cfg.Spec.Type)
 	}
 
-	return factory(), nil
+	s := factory()
+
+	metadata := store.Metadata{
+		Properties: map[string]string{},
+	}
+
+	for _, m := range cfg.Spec.Metadata {
+		metadata.Properties[m.Name] = m.Value
+	}
+
+	if err := s.Init(metadata); err != nil {
+		return s, err
+	}
+
+	return s, nil
 }
 
 func (r *eventstoreRegistry) CreateFromConfiguration(configs []config.Configuration) (map[string]store.EventStore, error) {
@@ -56,22 +70,11 @@ func (r *eventstoreRegistry) CreateFromConfiguration(configs []config.Configurat
 	resultmap := map[string]store.EventStore{}
 
 	for _, v := range configs {
-		s, err := r.Create(v.Spec.Type)
+		s, err := r.Create(v)
 		if err != nil {
 			builder.WriteString(fmt.Sprintf("%s\n", err))
+			resultmap[v.Metadata.Name] = s
 		} else {
-			metadata := store.Metadata{
-				Properties: map[string]string{},
-			}
-
-			for _, m := range v.Spec.Metadata {
-				metadata.Properties[m.Name] = m.Value
-			}
-
-			if err := s.Init(metadata); err != nil {
-				builder.WriteString(fmt.Sprintf("%s\n", err))
-			}
-
 			log.Printf("registry: Eventstore '%s' initialized\n", v.Metadata.Name)
 			resultmap[v.Metadata.Name] = s
 		}
