@@ -177,10 +177,32 @@ docker-publish: check-docker-publish-args
 	$(DOCKER) push $(dockerserver)/$(DOCKER_IMAGE_VERSION)
 	$(DOCKER) push $(dockerserver)/$(DOCKER_IMAGE_TAG)
 
+################################################################################
+# k8s
+################################################################################
 .PHONY: k8s-build
 k8s-build:
 	mkdir -p ./dist/k8s/
 	./deploy/create-deployments.sh --namespace $(EVENTSTORE_NAMESPACE) --input ./deploy/k8s --output ./dist/k8s
+
+check-k8s-publish-args:
+ifeq ($(namespace),)
+	$(error k8s namespace must be specified)
+endif
+
+.PHONY: k8s-publish
+k8s-publish: check-k8s-publish-args
+	mkdir -p ./dist/k8s/
+	./deploy/create-deployments.sh --namespace $(namespace) --input ./deploy/k8s --output ./dist/k8s
+	kubectl apply -f ./dist/k8s/injector-webhook-cfg.yaml
+	kubectl apply -f ./dist/k8s/injector-secret.yaml
+	kubectl apply -f ./dist/k8s/injector-deployment.yaml
+	kubectl apply -f ./dist/k8s/injector-service.yaml
+	kubectl apply -f ./dist/k8s/operator-service-account.yaml
+	kubectl apply -f ./dist/k8s/operator-clusterrole.yaml
+	kubectl apply -f ./dist/k8s/operator-clusterrole-binding.yaml
+	kubectl apply -f ./dist/k8s/operator-deployment.yaml
+	kubectl apply -f ./dist/k8s/operator-service.yaml
 
 ################################################################################
 # Target: test

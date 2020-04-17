@@ -125,6 +125,26 @@ func (a *api) onPutEntity(c *routing.Context) error {
 
 	res, err := eventstore.Append(&ety)
 	if err != nil {
+		evterr, ok := err.(store.EventStoreError)
+
+		if !ok {
+			msg := NewErrorResponse("ERR_INVOKE_PUT_ENTITY", fmt.Sprintf("can't add entity to eventstore: %s", err))
+			respondWithError(c.RequestCtx, fasthttp.StatusInternalServerError, msg)
+			return nil
+		}
+
+		if evterr.ErrorType == store.EntityNotFound {
+			msg := NewErrorResponse("ERR_INVOKE_PUT_ENTITY", fmt.Sprintf("can't add entity to eventstore: %s", err))
+			respondWithError(c.RequestCtx, fasthttp.StatusNotFound, msg)
+			return nil
+		}
+
+		if evterr.ErrorType == store.VersionConflict {
+			msg := NewErrorResponse("ERR_INVOKE_PUT_ENTITY", fmt.Sprintf("can't add entity to eventstore: %s", err))
+			respondWithError(c.RequestCtx, fasthttp.StatusConflict, msg)
+			return nil
+		}
+
 		msg := NewErrorResponse("ERR_INVOKE_PUT_ENTITY", fmt.Sprintf("can't add entity to eventstore: %s", err))
 		respondWithError(c.RequestCtx, fasthttp.StatusInternalServerError, msg)
 		return nil

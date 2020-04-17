@@ -35,12 +35,12 @@ func CreateCustomResourceDefinition(namespace string, clientSet apiextensionscli
 	}
 	_, err := clientSet.ApiextensionsV1beta1().CustomResourceDefinitions().Create(context.TODO(), crd, metav1.CreateOptions{})
 	if err == nil {
-		fmt.Println("CRD Eventstore is created")
+		fmt.Println("CRD Eventstore was created")
 	} else if apierrors.IsAlreadyExists(err) {
 		fmt.Println("CRD Eventstore already exists")
 		return nil
 	} else {
-		fmt.Printf("Fail to create CRD Eventstore: %+v\n", err)
+		fmt.Printf("Failed to create CRD Eventstore: %+v\n", err)
 
 		return err
 	}
@@ -49,7 +49,7 @@ func CreateCustomResourceDefinition(namespace string, clientSet apiextensionscli
 	err = wait.Poll(5*time.Second, 60*time.Second, func() (bool, error) {
 		crd, err = clientSet.ApiextensionsV1beta1().CustomResourceDefinitions().Get(context.TODO(), CRDName, metav1.GetOptions{})
 		if err != nil {
-			fmt.Printf("Fail to wait for CRD Eventstore creation: %+v\n", err)
+			fmt.Printf("Failed to wait for CRD Eventstore creation: %+v\n", err)
 
 			return false, err
 		}
@@ -74,7 +74,7 @@ func CreateCustomResourceDefinition(namespace string, clientSet apiextensionscli
 		fmt.Println("Try to cleanup")
 		deleteErr := clientSet.ApiextensionsV1beta1().CustomResourceDefinitions().Delete(context.TODO(), CRDName, metav1.DeleteOptions{})
 		if deleteErr != nil {
-			fmt.Printf("Fail to delete CRD Eventstore: %+v\n", deleteErr)
+			fmt.Printf("Failed to delete CRD Eventstore: %+v\n", deleteErr)
 
 			return errors.NewAggregate([]error{err, deleteErr})
 		}
