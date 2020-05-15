@@ -18,7 +18,7 @@ spec:
       serviceAccountName: eventstore-operator
       containers:
         - name: eventstored
-          image: m009/eventstored:0.01
+          image: m009/eventstored:latest
           imagePullPolicy: Always
           args:
             - ./operator

@@ -33,9 +33,11 @@ type api struct {
 }
 
 const (
-	eventstoreNameParam = "name"
-	entityIDParam       = "id"
-	versionQueryParam   = "version"
+	eventstoreNameParam        = "name"
+	entityIDParam              = "id"
+	versionQueryParam          = "version"
+	startVersionQueryParameter = "startversion"
+	endVersionQueryParameter   = "endversion"
 )
 
 // NewAPI creates a new server instance
@@ -50,6 +52,8 @@ func NewAPI(evtstores map[string]store.EventStore, registry registry.Registry) A
 func (a *api) RegisterRoutes(r *routing.Router) {
 	r.Post("/eventstores/<name>/entities/<id>", a.onPostEntity)
 	r.Put("/eventstores/<name>/entities/<id>", a.onPutEntity)
+	// /eventstore/<name>/entities/<id>?version=1
+	// /eventstore/<name>/entities/<id>?startversion=1&endversion=5
 	r.Get("/eventstores/<name>/entities/<id>", a.onGetEntity)
 	r.Post("/configurations/<name>", a.onPostConfiguration)
 }
@@ -58,8 +62,6 @@ func (a *api) onPostEntity(c *routing.Context) error {
 	id := c.Param(entityIDParam)
 	name := c.Param(eventstoreNameParam)
 	body := c.PostBody()
-
-	fmt.Println(string(body))
 
 	eventstore, ok := a.evtstores[name]
 	if !ok {
@@ -104,6 +106,21 @@ func (a *api) onPutEntity(c *routing.Context) error {
 	id := c.Param(entityIDParam)
 	name := c.Param(eventstoreNameParam)
 	body := c.PostBody()
+	version := int64(0)
+	concurrencyMode := store.None
+
+	if ifMatchVersion := c.RequestCtx.Request.Header.Peek("If-Match"); ifMatchVersion != nil && len(ifMatchVersion) > 0 {
+		v, err := strconv.ParseInt(string(ifMatchVersion), 10, 64)
+
+		if err != nil {
+			msg := NewErrorResponse("ERR_INVOKE_PUT_ENTITY", fmt.Sprintf("If-Match version not a valid number: %s", err))
+			respondWithError(c.RequestCtx, fasthttp.StatusBadRequest, msg)
+			return nil
+		}
+
+		concurrencyMode = store.Optimistic
+		version = v
+	}
 
 	eventstore, ok := a.evtstores[name]
 	if !ok {
@@ -122,8 +139,9 @@ func (a *api) onPutEntity(c *routing.Context) error {
 	}
 
 	ety.ID = id
+	ety.Version = version
 
-	res, err := eventstore.Append(&ety)
+	res, err := eventstore.Append(&ety, concurrencyMode)
 	if err != nil {
 		evterr, ok := err.(store.EventStoreError)
 
@@ -162,11 +180,15 @@ func (a *api) onPutEntity(c *routing.Context) error {
 }
 
 func (a *api) onGetEntity(c *routing.Context) error {
-	var version int64
+	var version int64 = -1
+	var startversion int64 = -1
+	var endversion int64 = -1
 
 	id := c.Param(entityIDParam)
 	name := c.Param(eventstoreNameParam)
 	vstr := c.QueryArgs().Peek(versionQueryParam)
+	startversionstr := c.QueryArgs().Peek(startVersionQueryParameter)
+	endversionstr := c.QueryArgs().Peek(endVersionQueryParameter)
 
 	eventstore, ok := a.evtstores[name]
 	if !ok {
@@ -185,6 +207,23 @@ func (a *api) onGetEntity(c *routing.Context) error {
 		}
 
 		version = v
+	} else if startversionstr != nil && endversionstr != nil {
+		start, err := strconv.ParseInt(string(startversionstr), 10, 64)
+		if err != nil {
+			msg := NewErrorResponse("ERR_INVOKE_GET_ENTITY", fmt.Sprintf("can't convert start version to number: %s", err))
+			respondWithError(c.RequestCtx, fasthttp.StatusBadRequest, msg)
+			return nil
+		}
+
+		end, err := strconv.ParseInt(string(endversionstr), 10, 64)
+		if err != nil {
+			msg := NewErrorResponse("ERR_INVOKE_GET_ENTITY", fmt.Sprintf("can't convert end version version to number: %s", err))
+			respondWithError(c.RequestCtx, fasthttp.StatusBadRequest, msg)
+			return nil
+		}
+
+		startversion = start
+		endversion = end
 	} else {
 		v, err := eventstore.GetLatestVersionNumber(id)
 		if err != nil {
@@ -196,15 +235,34 @@ func (a *api) onGetEntity(c *routing.Context) error {
 		version = v
 	}
 
-	ety, err := eventstore.GetByVersion(id, version)
+	if version != -1 {
+		ety, err := eventstore.GetByVersion(id, version)
 
+		if err != nil {
+			msg := NewErrorResponse("ERR_INVOKE_GET_ENTITY", fmt.Sprintf("can't load entity: %s", err))
+			respondWithError(c.RequestCtx, fasthttp.StatusNotFound, msg)
+			return nil
+		}
+
+		resdata, err := json.Marshal(ety)
+		if err != nil {
+			msg := NewErrorResponse("ERR_INVOKE_GET_ENTITY", fmt.Sprintf("can't serialize to respond: %s", err))
+			respondWithError(c.RequestCtx, fasthttp.StatusInternalServerError, msg)
+			return nil
+		}
+
+		respondWithJSON(c.RequestCtx, fasthttp.StatusOK, resdata)
+		return nil
+	}
+
+	etys, err := eventstore.GetByVersionRange(id, startversion, endversion)
 	if err != nil {
-		msg := NewErrorResponse("ERR_INVOKE_GET_ENTITY", fmt.Sprintf("can't load entity: %s", err))
+		msg := NewErrorResponse("ERR_INVOKE_GET_ENTITY", fmt.Sprintf("can't load entity versions: %s", err))
 		respondWithError(c.RequestCtx, fasthttp.StatusNotFound, msg)
 		return nil
 	}
 
-	resdata, err := json.Marshal(ety)
+	resdata, err := json.Marshal(etys)
 	if err != nil {
 		msg := NewErrorResponse("ERR_INVOKE_GET_ENTITY", fmt.Sprintf("can't serialize to respond: %s", err))
 		respondWithError(c.RequestCtx, fasthttp.StatusInternalServerError, msg)

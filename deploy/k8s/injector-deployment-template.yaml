@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: eventstored
-          image: m009/eventstored:0.01
+          image: m009/eventstored:latest
           imagePullPolicy: Always
           args:
             - ./injector
@@ -31,7 +31,7 @@ spec:
           - name: TLS_KEY_FILE
             value: /etc/webhook/certs/key.key
           - name: SIDECAR_IMAGE
-            value: m009/eventstored:0.01
+            value: m009/eventstored:latest
           - name: NAMESPACE
             value: ${NAMESPACE}
       volumes:
