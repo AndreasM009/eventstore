@@ -4,7 +4,7 @@ go 1.14
 
 require (
 	github.com/AdhityaRamadhanus/fasthttpcors v0.0.0-20170121111917-d4c07198763a
-	github.com/AndreasM009/eventstore-go v0.0.0-20200515142603-ee0fd6e96fe3
+	github.com/AndreasM009/eventstore-impl v0.0.0-20200618080406-827b7b46c386
 	github.com/go-ozzo/ozzo-routing v2.1.4+incompatible // indirect
 	github.com/golang/gddo v0.0.0-20200324184333-3c2cc9a6329d // indirect
 	github.com/json-iterator/go v1.1.9 // indirect

@@ -6,11 +6,13 @@ import (
 	"log"
 	"strings"
 
-	"github.com/AndreasM009/eventstore-go/store/azure/tablestorage"
+	"github.com/AndreasM009/eventstore-impl/store/azure/cosmosdb"
 
-	"github.com/AndreasM009/eventstore-go/store/inmemory"
+	"github.com/AndreasM009/eventstore-impl/store/azure/tablestorage"
 
-	"github.com/AndreasM009/eventstore-go/store"
+	"github.com/AndreasM009/eventstore-impl/store/inmemory"
+
+	"github.com/AndreasM009/eventstore-impl/store"
 	"github.com/AndreasM009/eventstore-service-go/pkg/eventstored/config"
 )
 
@@ -36,6 +38,10 @@ func NewRegistry() Registry {
 
 	r.factory["eventstore.azure.tablestorage"] = func() store.EventStore {
 		return tablestorage.NewStore()
+	}
+
+	r.factory["eventstore.azure.cosmosdb"] = func() store.EventStore {
+		return cosmosdb.NewStore()
 	}
 
 	return r

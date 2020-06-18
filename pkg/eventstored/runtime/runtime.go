@@ -11,7 +11,7 @@ import (
 	kubernetesConfig "github.com/AndreasM009/eventstore-service-go/pkg/eventstored/config/kubernetes"
 	standaloneConfig "github.com/AndreasM009/eventstore-service-go/pkg/eventstored/config/standalone"
 
-	"github.com/AndreasM009/eventstore-go/store"
+	"github.com/AndreasM009/eventstore-impl/store"
 	"github.com/AndreasM009/eventstore-service-go/pkg/eventstored/eventstore"
 	"github.com/AndreasM009/eventstore-service-go/pkg/eventstored/http"
 )

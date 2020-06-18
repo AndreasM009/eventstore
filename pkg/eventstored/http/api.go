@@ -15,7 +15,7 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/AndreasM009/eventstore-go/store"
+	"github.com/AndreasM009/eventstore-impl/store"
 	"github.com/AndreasM009/eventstore-service-go/pkg/eventstored/config"
 	registry "github.com/AndreasM009/eventstore-service-go/pkg/eventstored/eventstore"
 	routing "github.com/qiangxue/fasthttp-routing"

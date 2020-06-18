@@ -3,18 +3,8 @@ cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMT
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.38.0/go.mod h1:990N+gfupTy94rShfmMCWGDn0LpTmnzTp2qbd1dvSRU=
 github.com/AdhityaRamadhanus/fasthttpcors v0.0.0-20170121111917-d4c07198763a/go.mod h1:C0A1KeiVHs+trY6gUTPhhGammbrZ30ZfXRW/nuT7HLw=
-github.com/AndreasM009/eventstore-go v0.0.0-20200326180455-25f3a2019791 h1:0x6v4pKqR4tAtUKpCdqNnDRxeAZc8A6tJEOZI/rN6XQ=
-github.com/AndreasM009/eventstore-go v0.0.0-20200326180455-25f3a2019791/go.mod h1:wNE1d1J1+6rjwiTLPvOsRqfzVBSrN/VeFLZQFv3gebE=
-github.com/AndreasM009/eventstore-go v0.0.0-20200413064810-55e59d510ff7 h1:Oua7OZbZIyi0xq9WOfSRosU8ItNNi9cv/HAFUIPDDjo=
-github.com/AndreasM009/eventstore-go v0.0.0-20200413064810-55e59d510ff7/go.mod h1:Dl+iQ62ScOrRgnfIpXEKqv1UFDIzJYmwZ2fnRW88WKc=
-github.com/AndreasM009/eventstore-go v0.0.0-20200427111620-364ab6578d5c h1:m6yOiNOPvTXRxI2AYabwBukuvdGuD/Gyp2xQ6/d75jU=
-github.com/AndreasM009/eventstore-go v0.0.0-20200427111620-364ab6578d5c/go.mod h1:Dl+iQ62ScOrRgnfIpXEKqv1UFDIzJYmwZ2fnRW88WKc=
-github.com/AndreasM009/eventstore-go v0.0.0-20200502063401-d99530ee6990 h1:/Fp6Pd7YiGiqqLeghaL+v+1CnyvUgFFrSWlyk21t6mI=
-github.com/AndreasM009/eventstore-go v0.0.0-20200502063401-d99530ee6990/go.mod h1:Dl+iQ62ScOrRgnfIpXEKqv1UFDIzJYmwZ2fnRW88WKc=
-github.com/AndreasM009/eventstore-go v0.0.0-20200515140145-117dcd957cdf h1:D2U5bd031E5v+ecESIjYcDwwFnkwpgL6nJH03xYFM8A=
-github.com/AndreasM009/eventstore-go v0.0.0-20200515140145-117dcd957cdf/go.mod h1:Dl+iQ62ScOrRgnfIpXEKqv1UFDIzJYmwZ2fnRW88WKc=
-github.com/AndreasM009/eventstore-go v0.0.0-20200515142603-ee0fd6e96fe3 h1:h0KXcpx3c9BzB6Qe09FtoaJyQX/GeCCEz0xQE2H1Jo8=
-github.com/AndreasM009/eventstore-go v0.0.0-20200515142603-ee0fd6e96fe3/go.mod h1:Dl+iQ62ScOrRgnfIpXEKqv1UFDIzJYmwZ2fnRW88WKc=
+github.com/AndreasM009/eventstore-impl v0.0.0-20200618080406-827b7b46c386 h1:naxzlKxzBQH/ejz9g23qHPg9Rh6b2xpn1fOZF/k39Fg=
+github.com/AndreasM009/eventstore-impl v0.0.0-20200618080406-827b7b46c386/go.mod h1:AkRvP1t4wjXN84xxtAqvGlXa3XvPXMQgD/nfdd2HGzg=
 github.com/Azure/azure-sdk-for-go v40.5.0+incompatible h1:CVQNKuUepSFBo6BW6gM1J9slPHLRcjn6vaw+j+causw=
 github.com/Azure/azure-sdk-for-go v40.5.0+incompatible/go.mod h1:9XXNKU+eRnpl9moKnB4QOLf1HestfXbmab5FXxiDBjc=
 github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78/go.mod h1:LmzpDX56iTiv29bbRTIsUNlaFfuhWRQBWjQdVyAevI8=
@@ -42,6 +32,7 @@ github.com/PuerkitoBio/purell v1.1.1/go.mod h1:c11w/QuzBsJSee3cPx9rAFu61PvFxuPbt
 github.com/PuerkitoBio/urlesc v0.0.0-20160726150825-5bd2802263f2/go.mod h1:uGdkoq3SwY9Y+13GIhn11/XLaGBb4BfwItxLd5jeuXE=
 github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 h1:d+Bc7a5rLufV/sSk/8dngufqelfh6jnri85riMAaF/M=
 github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578/go.mod h1:uGdkoq3SwY9Y+13GIhn11/XLaGBb4BfwItxLd5jeuXE=
+github.com/a8m/documentdb v1.2.0/go.mod h1:4Z0mpi7fkyqjxUdGiNMO3vagyiUoiwLncaIX6AsW5z0=
 github.com/agnivade/levenshtein v1.0.1/go.mod h1:CURSv5d9Uaml+FovSIICkLbAUZ9S4RqaHDIsdSBg7lM=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
@@ -207,6 +198,7 @@ github.com/imdario/mergo v0.3.5/go.mod h1:2EnlNZ0deacrJVfApfmtdGgDfMuh/nq6Ok1EcJ
 github.com/inconshreveable/log15 v0.0.0-20170622235902-74a0988b5f80/go.mod h1:cOaXtrgN4ScfRrD9Bre7U1thNq5RtJ8ZoP4iXVGRj6o=
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
 github.com/jonboulle/clockwork v0.1.0/go.mod h1:Ii8DK3G1RaLaWxj9trq07+26W01tbo22gdxWY5EU2bo=
+github.com/json-iterator/go v1.1.5/go.mod h1:+SdeFBvtyEkXs7REEP0seUULqWtbJapLOCVDaaPEHmU=
 github.com/json-iterator/go v1.1.6/go.mod h1:+SdeFBvtyEkXs7REEP0seUULqWtbJapLOCVDaaPEHmU=
 github.com/json-iterator/go v1.1.7/go.mod h1:KdQUCv79m/52Kvf8AW2vK1V8akMuk1QjK/uOdHXbAo4=
 github.com/json-iterator/go v1.1.8/go.mod h1:KdQUCv79m/52Kvf8AW2vK1V8akMuk1QjK/uOdHXbAo4=
@@ -313,6 +305,7 @@ github.com/spf13/viper v1.0.0/go.mod h1:A8kyI5cUJhb8N+3pkfONlcEcZbueH6nhAm0Fq7Sr
 github.com/spf13/viper v1.3.2/go.mod h1:ZiWeW+zYFKm7srdB9IoDzzZXaJaI5eL9QjNiN/DMA2s=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
+github.com/stretchr/objx v0.2.0 h1:Hbg2NidpLE8veEBkEZTL3CvlkUIVzuU9jDplZO54c48=
 github.com/stretchr/objx v0.2.0/go.mod h1:qt09Ya8vawLte6SNmTgCsAVtYtaKzEcn8ATUoHMkEqE=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
