@@ -5,7 +5,7 @@ var (
 	commit  string
 )
 
-// Version return the version of eventstore-service-go
+// Version return the version of eventstore
 func Version() string {
 	return version
 }

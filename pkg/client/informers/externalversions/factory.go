@@ -23,9 +23,9 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "github.com/AndreasM009/eventstore-service-go/pkg/client/clientset/versioned"
-	eventstore "github.com/AndreasM009/eventstore-service-go/pkg/client/informers/externalversions/eventstore"
-	internalinterfaces "github.com/AndreasM009/eventstore-service-go/pkg/client/informers/externalversions/internalinterfaces"
+	versioned "github.com/AndreasM009/eventstore/pkg/client/clientset/versioned"
+	eventstore "github.com/AndreasM009/eventstore/pkg/client/informers/externalversions/eventstore"
+	internalinterfaces "github.com/AndreasM009/eventstore/pkg/client/informers/externalversions/internalinterfaces"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

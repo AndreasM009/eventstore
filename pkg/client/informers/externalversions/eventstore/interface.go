@@ -19,8 +19,8 @@ limitations under the License.
 package eventstore
 
 import (
-	v1alpha1 "github.com/AndreasM009/eventstore-service-go/pkg/client/informers/externalversions/eventstore/v1alpha1"
-	internalinterfaces "github.com/AndreasM009/eventstore-service-go/pkg/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "github.com/AndreasM009/eventstore/pkg/client/informers/externalversions/eventstore/v1alpha1"
+	internalinterfaces "github.com/AndreasM009/eventstore/pkg/client/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to each of this group's versions.

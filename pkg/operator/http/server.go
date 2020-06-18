@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	eventstoreclient "github.com/AndreasM009/eventstore-service-go/pkg/client/clientset/versioned"
+	eventstoreclient "github.com/AndreasM009/eventstore/pkg/client/clientset/versioned"
 	routing "github.com/qiangxue/fasthttp-routing"
 	"github.com/valyala/fasthttp"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

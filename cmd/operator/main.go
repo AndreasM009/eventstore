@@ -9,10 +9,10 @@ import (
 	"syscall"
 	"time"
 
-	eventstoreclient "github.com/AndreasM009/eventstore-service-go/pkg/client/clientset/versioned"
-	"github.com/AndreasM009/eventstore-service-go/pkg/factories"
-	"github.com/AndreasM009/eventstore-service-go/pkg/operator"
-	"github.com/AndreasM009/eventstore-service-go/pkg/operator/http"
+	eventstoreclient "github.com/AndreasM009/eventstore/pkg/client/clientset/versioned"
+	"github.com/AndreasM009/eventstore/pkg/factories"
+	"github.com/AndreasM009/eventstore/pkg/operator"
+	"github.com/AndreasM009/eventstore/pkg/operator/http"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 )
 

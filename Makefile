@@ -74,7 +74,7 @@ export BINARY_EXT ?= $(BINARY_EXT_LOCAL)
 ################################################################################
 # GO build flags
 ################################################################################
-BASE_PACKAGE_NAME := github.com/AndreasM009/eventstore-service-go
+BASE_PACKAGE_NAME := github.com/AndreasM009/eventstore
 
 DEFAULT_LDFLAGS := -X $(BASE_PACKAGE_NAME)/pkg/version.commit=$(GIT_VERSION) -X $(BASE_PACKAGE_NAME)/pkg/version.version=$(EVENTSTORE_VERSION)
 ifeq ($(DEBUG),)

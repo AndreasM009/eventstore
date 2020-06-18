@@ -5,7 +5,7 @@ import (
 
 	cors "github.com/AdhityaRamadhanus/fasthttpcors"
 	"github.com/AndreasM009/eventstore-impl/store"
-	registry "github.com/AndreasM009/eventstore-service-go/pkg/eventstored/eventstore"
+	registry "github.com/AndreasM009/eventstore/pkg/eventstored/eventstore"
 	routing "github.com/qiangxue/fasthttp-routing"
 	"github.com/valyala/fasthttp"
 )

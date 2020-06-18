@@ -1,2 +1,2 @@
-# eventstore-service-go
+# eventstore
 EventStore REST Service

@@ -3,8 +3,8 @@ package operator
 import (
 	"context"
 
-	eventstorev1alphav1 "github.com/AndreasM009/eventstore-service-go/pkg/apis/eventstore/v1alpha1"
-	scheme "github.com/AndreasM009/eventstore-service-go/pkg/client/clientset/versioned"
+	eventstorev1alphav1 "github.com/AndreasM009/eventstore/pkg/apis/eventstore/v1alpha1"
+	scheme "github.com/AndreasM009/eventstore/pkg/client/clientset/versioned"
 	appsv1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"

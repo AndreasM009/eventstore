@@ -19,8 +19,8 @@ limitations under the License.
 package v1alpha1
 
 import (
-	v1alpha1 "github.com/AndreasM009/eventstore-service-go/pkg/apis/eventstore/v1alpha1"
-	"github.com/AndreasM009/eventstore-service-go/pkg/client/clientset/versioned/scheme"
+	v1alpha1 "github.com/AndreasM009/eventstore/pkg/apis/eventstore/v1alpha1"
+	"github.com/AndreasM009/eventstore/pkg/client/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
 

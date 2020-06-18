@@ -21,7 +21,7 @@ package versioned
 import (
 	"fmt"
 
-	eventstorev1alpha1 "github.com/AndreasM009/eventstore-service-go/pkg/client/clientset/versioned/typed/eventstore/v1alpha1"
+	eventstorev1alpha1 "github.com/AndreasM009/eventstore/pkg/client/clientset/versioned/typed/eventstore/v1alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"

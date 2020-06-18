@@ -5,8 +5,8 @@ import (
 	"errors"
 	"log"
 
-	eventstorev1alpha1 "github.com/AndreasM009/eventstore-service-go/pkg/apis/eventstore/v1alpha1"
-	eventstore "github.com/AndreasM009/eventstore-service-go/pkg/client/clientset/versioned"
+	eventstorev1alpha1 "github.com/AndreasM009/eventstore/pkg/apis/eventstore/v1alpha1"
+	eventstore "github.com/AndreasM009/eventstore/pkg/client/clientset/versioned"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"

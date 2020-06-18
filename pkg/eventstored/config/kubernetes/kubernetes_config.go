@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/AndreasM009/eventstore-service-go/pkg/eventstored/config"
+	"github.com/AndreasM009/eventstore/pkg/eventstored/config"
 )
 
 type kubernetesConfigurationProvider struct {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/AndreasM009/eventstore-service-go/pkg/eventstored/config"
+	"github.com/AndreasM009/eventstore/pkg/eventstored/config"
 	"gopkg.in/yaml.v2"
 )
 

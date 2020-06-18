@@ -7,9 +7,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/AndreasM009/eventstore-service-go/pkg/factories"
+	"github.com/AndreasM009/eventstore/pkg/factories"
 
-	"github.com/AndreasM009/eventstore-service-go/pkg/injector"
+	"github.com/AndreasM009/eventstore/pkg/injector"
 )
 
 func main() {

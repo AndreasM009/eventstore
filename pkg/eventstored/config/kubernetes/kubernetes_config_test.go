@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/AndreasM009/eventstore-service-go/pkg/eventstored/config"
+	"github.com/AndreasM009/eventstore/pkg/eventstored/config"
 	"github.com/stretchr/testify/assert"
 )
 

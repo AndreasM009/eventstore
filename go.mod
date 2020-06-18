@@ -1,4 +1,4 @@
-module github.com/AndreasM009/eventstore-service-go
+module github.com/AndreasM009/eventstore
 
 go 1.14
 

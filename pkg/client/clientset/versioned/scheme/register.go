@@ -19,7 +19,7 @@ limitations under the License.
 package scheme
 
 import (
-	eventstorev1alpha1 "github.com/AndreasM009/eventstore-service-go/pkg/apis/eventstore/v1alpha1"
+	eventstorev1alpha1 "github.com/AndreasM009/eventstore/pkg/apis/eventstore/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

@@ -10,7 +10,7 @@ import (
 
 	"k8s.io/apimachinery/pkg/labels"
 
-	v1alpha1 "github.com/AndreasM009/eventstore-service-go/pkg/apis/eventstore/v1alpha1"
+	v1alpha1 "github.com/AndreasM009/eventstore/pkg/apis/eventstore/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"

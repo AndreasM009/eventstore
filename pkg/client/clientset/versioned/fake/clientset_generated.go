@@ -19,9 +19,9 @@ limitations under the License.
 package fake
 
 import (
-	clientset "github.com/AndreasM009/eventstore-service-go/pkg/client/clientset/versioned"
-	eventstorev1alpha1 "github.com/AndreasM009/eventstore-service-go/pkg/client/clientset/versioned/typed/eventstore/v1alpha1"
-	fakeeventstorev1alpha1 "github.com/AndreasM009/eventstore-service-go/pkg/client/clientset/versioned/typed/eventstore/v1alpha1/fake"
+	clientset "github.com/AndreasM009/eventstore/pkg/client/clientset/versioned"
+	eventstorev1alpha1 "github.com/AndreasM009/eventstore/pkg/client/clientset/versioned/typed/eventstore/v1alpha1"
+	fakeeventstorev1alpha1 "github.com/AndreasM009/eventstore/pkg/client/clientset/versioned/typed/eventstore/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"

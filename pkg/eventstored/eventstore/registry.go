@@ -13,7 +13,7 @@ import (
 	"github.com/AndreasM009/eventstore-impl/store/inmemory"
 
 	"github.com/AndreasM009/eventstore-impl/store"
-	"github.com/AndreasM009/eventstore-service-go/pkg/eventstored/config"
+	"github.com/AndreasM009/eventstore/pkg/eventstored/config"
 )
 
 // Registry interface
